@@ -8,7 +8,7 @@
 #define HC4094DataHigh() (HC4094_PORT|=(1<<HC4094_DATA_PIN))
 #define HC4094DataLow() (HC4094_PORT&=(~(1<<HC4094_DATA_PIN)))
 
-void HC4094Init(void);
-void HC4094Pulse(void);
-void HC4094Latch(void);
-void HC4094Write(uint8_t);
+extern void HC4094Init(void);
+extern void HC4094Pulse(void);
+extern void HC4094Latch(void);
+extern void HC4094Write(uint8_t);
