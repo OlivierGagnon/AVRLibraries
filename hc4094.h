@@ -12,3 +12,4 @@ extern void HC4094Init(void);
 extern void HC4094Pulse(void);
 extern void HC4094Latch(void);
 extern void HC4094Write(uint8_t);
+extern void DualHC4094Write(uint8_t, uint8_t);
