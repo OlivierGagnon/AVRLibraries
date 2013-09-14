@@ -121,6 +121,20 @@ BOOL DS1307Write(uint8_t address,uint8_t data)
 
 #ifdef DEBUGGING
 
+#define BITDELAY _delay_us(26)
+#define TXPIN PB1
+
+//simple macros to set port to on or off
+#define TXPIN_LOW (PORTB &= ~(1<<TXPIN))
+#define TXPIN_HIGH (PORTB |= (1<<TXPIN))
+
+extern void TXInit(void);
+extern void SendChar(char);
+extern void SendCR(void);
+extern void SendString(char *);
+
+
+
 
 void TXRegisters(void)
 {
@@ -143,11 +157,6 @@ void TXRegisters(void)
 	SendChar(temp1);
 	*/
 	SendChar(0xff);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_ms(1000);
 }
 
 void TXTime(void)
@@ -168,11 +177,6 @@ void TXTime(void)
 	Time[0]=48+((data & 0b00110000)>>4);
 	SendString(Time);
 	SendCR();
-	//_delay_ms(1000);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
 }
 
 //giving some garbage characters
@@ -194,11 +198,6 @@ void TXTimeX(void)
 	Time[0]=48+((data & 0b00110000)>>4);
 	SendString(Time);
 	SendCR();
-	//_delay_ms(1000);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
 }
 
 void TXBinTime(void)
@@ -231,11 +230,6 @@ void TXBinTime(void)
 	SendChar(hours);
 
 	SendChar(0xff);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_loop_2(65535);
-	_delay_ms(1000);
 }
 
 #endif
@@ -309,8 +303,8 @@ void SetTime(void)
 	result = DS1307Write(0x00,temp); //write back with ch = 0
 
 
-	result = DS1307Read(0x02,&temp); //Set 24 Hour Mode
-	temp |= 0b01000000; //Set 24 Hour BIT
+	result = DS1307Read(0x02,&temp); //Set 12 Hour Mode
+	temp |= 0b01000000; //Set 12 Hour BIT
 	result = DS1307Write(0x02,temp); //Write Back to DS1307
 
 	//Set initial time. Check datasheet to know how to set it up

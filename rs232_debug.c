@@ -2,19 +2,20 @@
 
 //start rs232 communication functions
 
-//delay per bit = 1sec/38400bps = 26 useconds per bit
+//delay per bit = 1sec/28800bps = 34 useconds per bit
 //(1 start bit, 8 data bits, and 1 stop bit)
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include "rs232_debug.h"
 
 void TXInit(void)
 {
-	DDRB |= (1<<TXPIN); //portb0 as output
+	RS232_DDR |= (1<<TXPIN); //portb0 as output
 	TXPIN_LOW; //TXPIN to low. meaning rs232 to HIGH state = idle.
 }
 
-void SendChar(char data)
+void TXChar(char data)
 {
 	TXPIN_HIGH; //TXPIN to high. meaning rs232 to low = start bit.
 	BITDELAY; //delay after start bit
@@ -50,18 +51,18 @@ void SendChar(char data)
 
 
 //sends a string formatted like: char String1[]="This is string 1"
-void SendString(char* StringPtr)
+void TXString(char* StringPtr)
 {
 	//sends a string
 	while(*StringPtr != 0x00)
 	{
-		SendChar(*StringPtr);
+		TXChar(*StringPtr);
 		StringPtr++;
 	}
 }
 
 // sends a carriage return, to look nice on the display when using strings
-void SendCR(void)
+void TXCR(void)
 {
-	SendChar(0x0d);
+	TXChar(0x0d);
 }
